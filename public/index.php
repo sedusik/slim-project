@@ -6,6 +6,9 @@ require __DIR__ . '/../vendor/autoload.php';
 // Контейнеры в этом курсе не рассматриваются (это тема связанная с самим ООП), но если интересно, то посмотрите DI Container
 use Slim\Factory\AppFactory;
 use DI\Container;
+use function Symfony\Component\String\s;
+
+$users = ['mike', 'mishel', 'adel', 'keks', 'kamila'];
 
 $container = new Container();
 $container->set('renderer', function () {
@@ -19,8 +22,16 @@ $app->get('/', function ($request, $response) {
     return $response->write('Welcome to Slim!');
 });
 
-$app->get('/users', function ($request, $response) {
-    return $response->write('GET /users');
+$app->get('/users', function ($request, $response) use ($users) {
+    $term = $request->getQueryParam('term');
+    $result = collect($users)->filter(
+        fn($user) => empty($term) ? true : str_contains($user, $term)
+    );
+    $params = [
+        'users' => $result,
+        'term' => $term
+    ];
+    return $this->get('renderer')->render($response, 'users/index.phtml', $params);
 });
 
 $app->post('/users', function ($request, $response) {
@@ -41,3 +52,4 @@ $app->get('/users/{id}', function ($request, $response, $args) {
 });
 
 $app->run();
+

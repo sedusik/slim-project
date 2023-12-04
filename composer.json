@@ -4,6 +4,8 @@
         "slim/psr7": "^1.6",
         "slim/http": "^1.3",
         "slim/php-view": "^3.2",
-        "php-di/php-di": "^7.0"
+        "php-di/php-di": "^7.0",
+        "tightenco/collect": "^9.52",
+        "symfony/string": "^6.4"
     }
 }
